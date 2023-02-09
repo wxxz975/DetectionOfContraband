@@ -39,7 +39,7 @@ public:
     std::vector<ONNXTensorElementDataType> outputTensorType;
 
     bool isDynamicInputShape = false;
-    std::vector<std::string> classLabels;
+    //std::vector<std::string> classLabels;
 
     std::vector<float*> blobs;
     std::vector<size_t> blobsSize;

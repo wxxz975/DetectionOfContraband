@@ -6,11 +6,10 @@
 #include <memory>
 #include "UI/AbstractApplication.h"
 #include "UI/ui_Engine.h"
-#include "ModelAdapter/onnx/OnnxruntimeInfer.h"
 
 
 
-class Application: public AbstractApplication
+class Application: public AbstractApplication, public ui_Engine
 {
 
 private:
@@ -19,8 +18,7 @@ private:
     const char* WindowName = "ContrabandOfDetection";
     ImVec2 windSize = {720.f,  320.f};
 
-    std::unique_ptr<ui_AbstractEngine> m_engine = std::make_unique<ui_Engine>();
-    std::unique_ptr<AbstractDetectAlgorithm> m_algo = std::make_unique<OnnxruntimeInfer>("yolov5s.onnx", true);
+    //std::unique_ptr<ui_AbstractEngine> m_engine = std::make_unique<ui_Engine>();
     float windowFontSacle = 1.2f;
 public:
     Application();

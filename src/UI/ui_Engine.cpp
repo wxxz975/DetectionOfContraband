@@ -1,7 +1,9 @@
 #include <imgui/imgui.h>
 #include "UI/ui_Engine.h"
 #include "Common/Image.h"
+#include "ModelAdapter/onnx/Utils.h"
 #include <map>
+
 
 void OnDocking()
 {
@@ -60,7 +62,7 @@ void OnDocking()
 }
 
                             // <lables index, confidence>
-void myCreateTable(const std::map<int, float>& data = {}, const std::vector<std::string>& lables = {}) {
+void myCreateTable(const std::vector<DetectionResultNode>& data = {}, const std::vector<std::string>& lables = {}) {
     int maxSz = lables.size(), dataCnt = data.size();
 
     using namespace ImGui;
@@ -81,8 +83,8 @@ void myCreateTable(const std::map<int, float>& data = {}, const std::vector<std:
     for (const auto& iter : data)
     {
         Columns(2, "data");
-        Text("%s", lables[iter.first].c_str()); NextColumn();
-        Text("%.4f", iter.second); NextColumn();
+        Text("%s", lables[iter.classIndex].c_str()); NextColumn();
+        Text("%.4f", iter.confidence); NextColumn();
         Columns(1);
     }
     EndChild();
@@ -91,8 +93,27 @@ void myCreateTable(const std::map<int, float>& data = {}, const std::vector<std:
     EndChild();
 }
 
+GLuint CreateTexture(const cv::Mat& image) {
+    cv::Mat imageRGBA;
+    cv::cvtColor(image, imageRGBA, cv::COLOR_BGR2RGBA);
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.cols, image.rows, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageRGBA.ptr());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-//static ImGui::FileBrowser fileDialog;
+    return textureID;
+}
+
+enum DialogAction: uint8_t {
+    AC_LOAD_MODEL = 1,
+    AC_LOAD_IMAGE = 2,
+};
+
+
+
+static uint8_t action = 0;
 bool ui_Engine::setupUi(ui_AbstractEngine* parent) {
     (void)parent; // avoid warning
     
@@ -100,20 +121,23 @@ bool ui_Engine::setupUi(ui_AbstractEngine* parent) {
     OnDocking();
     {
         Begin("Image Show");
-
+        if(0 != texId) {
+            Image((void*)(intptr_t)texId, GetWindowSize());
+        }
         End();
     }
-    static std::map<int, float> mp = {
-            {2, 0.87}, {5, 0.56}, {0, 0.87}
-    };
-    static std::vector<std::string> lables = {
-        "cat", "car", "tree", "computer",
-        "notebook", "musicBox"
-    };
+    
+    static std::vector<std::string> lables = m_algo->m_labelNames;
     {
-        Begin("Contral Bar");
 
-        myCreateTable(mp, lables);
+        Begin("Contral Bar");
+        if(0 != this->texId) {
+            
+            myCreateTable(this->m_result, lables);
+        }else {
+            myCreateTable();
+        }
+        
 
 
         {
@@ -122,8 +146,6 @@ bool ui_Engine::setupUi(ui_AbstractEngine* parent) {
             static float confThreshold = 0.5f;
             static float iouThreshold = 0.45f;
 
-            //Text("");
-            //ImGui::SetCursorPosX();
             ImGui::PushItemWidth(100.0f);
             if (SliderFloat("confidence Threshold", &confThreshold, 0, 1)) {
                 // change the  out conf
@@ -144,31 +166,49 @@ bool ui_Engine::setupUi(ui_AbstractEngine* parent) {
             Text("Second. select the picture to be reasoned"); NewLine();
 
             if (Button("LoadModel", ImVec2(100, 80))) {
-                /*
                 fileDialog.SetTitle("please select a onnx model");
                 fileDialog.SetTypeFilters({ ".onnx" });
                 fileDialog.Open();
-                */
+                action |= AC_LOAD_MODEL;
             }
             SameLine();
             if (Button("SelectImage", ImVec2(100, 80))) {
-                /*
+                 //////// test
                 fileDialog.SetTitle("please select a image");
                 fileDialog.SetTypeFilters({".jpg", ".jpeg", ".png", ".bmp"});
                 fileDialog.Open();
-                */
+                action |= AC_LOAD_IMAGE;
+                
             }
 
             EndChild();
         }
         
-        /*
+        
         fileDialog.Display();
 
         if (fileDialog.HasSelected()) {
-            std::cout << "Selected filename:" << fileDialog.GetSelected().string() << std::endl;
+            //std::cout << action << "\n";
+            auto selctedPath = fileDialog.GetSelected().string();
+            if(action & AC_LOAD_MODEL) {
+                std::cout << "load model\n";
+                //m_algo->
+            }
+            if(action & AC_LOAD_IMAGE) {
+                std::cout << "detect image\n";
+                auto image = cv::imread(selctedPath);
+                this->m_result = m_algo->detect(image);
+                OnnxruntimeUtils::visualizeDetection(image, this->m_result, m_algo->m_labelNames);
+                if(0 != this->texId) {
+                    glDeleteTextures(1, &(this->texId));
+                }
+                this->texId = CreateTexture(image);
+
+            }
+            //std::cout << "Selected filename:" << fileDialog.GetSelected().string() << std::endl;
             fileDialog.ClearSelected();
-        }*/
+            action &= 0;
+        }
         
         End();
     }

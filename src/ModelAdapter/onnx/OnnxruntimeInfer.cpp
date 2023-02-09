@@ -121,7 +121,7 @@ bool OnnxruntimeInfer::initLabels() {
     printf("labels:%s\n", namesRaw.get());
 
     try {
-        classLabels = OnnxruntimeUtils::parseVecFromRaw(namesRaw.get());
+        m_labelNames = OnnxruntimeUtils::parseVecFromRaw(namesRaw.get());
     } catch (std::exception& err) {
         std::cout << "load labels name error:"<< err.what()
              << std::endl;

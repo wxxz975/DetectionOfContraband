@@ -6,6 +6,9 @@ add_definitions(-DAPI_EXPORTS)
 option(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
 set(CMAKE_BUILD_TYPE Debug)
 
+# opengl 2.x
+include_directories(/usr/include)
+link_directories(/usr/lib)
 
 # tensorrt
 include_directories(/usr/include/aarch64-linux-gnu)
@@ -44,14 +47,18 @@ add_library(COMMON STATIC ${COMMON_OBJ})
 file(GLOB_RECURSE MODEL_OBJ ${PROJECT_SOURCE_DIR}/src/ModelAdapter/*.cpp)
 add_library(MODEL STATIC ${MODEL_OBJ})
 
-foreach(name IN LISTS UI_OBJ)
-    message(STATUS "UI obj: " ${name})
-endforeach()
+
+add_library(FILE_BROWSER_OBJ STATIC ${PROJECT_SOURCE_DIR}/src/UI/Widgets/ui_FileBrowser.cpp)
+target_link_libraries(FILE_BROWSER_OBJ ImGui)
+
 
 file(GLOB_RECURSE UI_OBJ ${PROJECT_SOURCE_DIR}/src/UI/*.cpp)
 add_library(UI STATIC ${UI_OBJ})
-target_link_libraries(UI MODEL COMMON ImGui)
+target_link_libraries(UI MODEL COMMON ImGui FILE_BROWSER_OBJ)
 
+foreach(name IN LISTS UI_OBJ)
+    message(STATUS "UI obj: " ${name})
+endforeach()
 
 add_executable(${PROJECT_NAME}
     src/main.cpp

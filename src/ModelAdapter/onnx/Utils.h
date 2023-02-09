@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <opencv2/opencv.hpp>
-
+#include "ModelAdapter/AbstractDetectAlgorithm.h"
 namespace OnnxruntimeUtils {
 
     // to parse the raw data where readed from onnx model. format:  names = ['car', 'people', 'house', ...]
@@ -24,6 +24,6 @@ namespace OnnxruntimeUtils {
     void getBestClassInfo(std::vector<float>::iterator it, const int& numClasses,
                                     float& bestConf, int& bestClassId);    
 
-    void visualizeDetection(cv::Mat& image, std::vector<Detection>& detections,
+    void visualizeDetection(cv::Mat& image, std::vector<DetectionResultNode>& detections,
                                const std::vector<std::string>& classNames);          
 }

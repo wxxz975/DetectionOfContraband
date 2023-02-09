@@ -2,12 +2,17 @@
 #include <cassert>
 #include <cstdio>
 
+
+#include <opencv2/opencv.hpp>
+
+
+
 static void glfw_error_callback(int error, const char* description)
 {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
-Application::Application(){
+Application::Application(): AbstractApplication(), ui_Engine() {
  // Setup window
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
@@ -83,11 +88,12 @@ bool Application::run()
     {
         this->preprocess();
     
-        this->m_engine->setupUi();
+        this->setupUi();
      
         this->postprocess();
     }
-    
+   
+
     return true;
 }
 

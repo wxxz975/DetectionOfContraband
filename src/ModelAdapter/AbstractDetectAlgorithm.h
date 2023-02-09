@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 #include <string>
 #include <map>
@@ -14,7 +15,7 @@ typedef struct _DetectionResultNode
 
 class AbstractDetectAlgorithm
 {
-protected:
+public:
     std::vector<std::string> m_labelNames;
 public:
 
@@ -23,6 +24,7 @@ public:
     virtual ~AbstractDetectAlgorithm() = default;
 
     virtual const std::vector<DetectionResultNode> detect(const cv::Mat& image) = 0;
+
 };
 
 
