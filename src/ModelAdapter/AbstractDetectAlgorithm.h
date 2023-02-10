@@ -16,7 +16,9 @@ typedef struct _DetectionResultNode
 class AbstractDetectAlgorithm
 {
 public:
-    std::vector<std::string> m_labelNames;
+    std::vector<std::string> m_labelNames; 
+    float confThreshold = 0.4; // confidence threshold
+    float iouThreshold = 0.45;  // iou threshold
 public:
 
     AbstractDetectAlgorithm() = default;

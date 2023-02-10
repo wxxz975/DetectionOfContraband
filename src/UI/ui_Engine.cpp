@@ -1,11 +1,10 @@
 #include <imgui/imgui.h>
 #include "UI/ui_Engine.h"
-#include "Common/Image.h"
 #include "ModelAdapter/onnx/Utils.h"
 #include <map>
 
 
-void OnDocking()
+void ui_Engine::OnDocking() const
 {
     static bool opt_fullscreen = true;
     static bool opt_padding = false;
@@ -93,19 +92,6 @@ void myCreateTable(const std::vector<DetectionResultNode>& data = {}, const std:
     EndChild();
 }
 
-GLuint CreateTexture(const cv::Mat& image) {
-    cv::Mat imageRGBA;
-    cv::cvtColor(image, imageRGBA, cv::COLOR_BGR2RGBA);
-    GLuint textureID;
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.cols, image.rows, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageRGBA.ptr());
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    return textureID;
-}
-
 enum DialogAction: uint8_t {
     AC_LOAD_MODEL = 1,
     AC_LOAD_IMAGE = 2,
@@ -132,7 +118,6 @@ bool ui_Engine::setupUi(ui_AbstractEngine* parent) {
 
         Begin("Contral Bar");
         if(0 != this->texId) {
-            
             myCreateTable(this->m_result, lables);
         }else {
             myCreateTable();
@@ -143,17 +128,19 @@ bool ui_Engine::setupUi(ui_AbstractEngine* parent) {
         {
             BeginChild("ThresHold",ImVec2(0,60), true);
             // get the config
-            static float confThreshold = 0.5f;
-            static float iouThreshold = 0.45f;
+            static float confThreshold = m_algo->confThreshold;
+            static float iouThreshold = m_algo->iouThreshold;
 
             ImGui::PushItemWidth(100.0f);
             if (SliderFloat("confidence Threshold", &confThreshold, 0, 1)) {
                 // change the  out conf
-                std::cout << "change confidence:" << confThreshold << "\n";
+                //std::cout << "change confidence:" << confThreshold << "\n";
+                m_algo->confThreshold = confThreshold;
             }
             
             if (SliderFloat("iou Threshold", &iouThreshold, 0, 1)) {
-                std::cout << "change iou:" << iouThreshold << "\n";
+                //std::cout << "change iou:" << iouThreshold << "\n";
+                m_algo->iouThreshold = iouThreshold;
             }
             ImGui::PopItemWidth();
 

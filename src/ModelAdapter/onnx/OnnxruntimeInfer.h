@@ -25,12 +25,9 @@ private:
     bool initTensor();
     bool initEnv(const std::string& modelPath);
     
-    float confThreshold = 0.4;
-    float iouThreshold = 0.45;
-
 public:
     OnnxruntimeInfer() = default;
-    OnnxruntimeInfer(const std::string& modelPath = "yolov5s.onnx", const bool isGPU = true);
+    OnnxruntimeInfer(const std::string& modelPath = "x_ray.onnx", const bool isGPU = true);
     ~OnnxruntimeInfer();
 
     const std::vector<DetectionResultNode> detect(const cv::Mat &image) override; 

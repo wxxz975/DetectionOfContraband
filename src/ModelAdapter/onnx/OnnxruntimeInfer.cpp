@@ -15,14 +15,6 @@ void OnnxruntimeInfer::preprocessing(const cv::Mat &image, std::vector<int64_t>&
     inputTensorShape[3] = resizedImage.cols;
 
     resizedImage.convertTo(floatImage, CV_32FC3, 1 / 255.0);
-    
-    // uint32_t blob_size = floatImage.cols * floatImage.rows * floatImage.channels();
-    // if(blob_size > this->cur_blob_size) {
-    //     if(this->blob != nullptr) delete this->blob;
-
-    //     this->blob = new float[blob_size];
-    //     this->cur_blob_size = blob_size;
-    // }
      
     cv::Size floatImageSize {floatImage.cols, floatImage.rows};
    
@@ -30,7 +22,7 @@ void OnnxruntimeInfer::preprocessing(const cv::Mat &image, std::vector<int64_t>&
     std::vector<cv::Mat> chw(floatImage.channels());
     for (int i = 0; i < floatImage.channels(); ++i)
     {
-        chw[i] = cv::Mat(floatImageSize, CV_32FC1, blobs[0] + i * floatImageSize.width * floatImageSize.height);
+        chw[i] = cv::Mat(floatImageSize, CV_32FC1, blob + i * floatImageSize.width * floatImageSize.height);
     }
     cv::split(floatImage, chw);
 
@@ -57,7 +49,7 @@ const std::vector<DetectionResultNode> OnnxruntimeInfer::postprocessing(const cv
     int numClasses = (int)outputShape[2] - 5;
     int elementsInBatch = (int)(outputShape[1] * outputShape[2]); // 它相当于只有一个batch, 这里取的ouput的withd*height
 
-    // only for batch size = 1
+
     for (auto it = output.begin(); it != output.begin() + elementsInBatch; it += outputShape[2])
     {
         float clsConf = it[4];
@@ -162,11 +154,11 @@ bool OnnxruntimeInfer::initTensor() {
         outputTensorSize.push_back(OnnxruntimeUtils::vectorProduct(tenShape));
     }
 
-    for(size_t idx = 0; idx < inputCount; ++idx) {
-        float * blob = new float[inputTensorSize[idx]];
-        blobs.push_back(blob);
-    }
-
+    // for(size_t idx = 0; idx < inputCount; ++idx) {
+    //     blobs.push_back(std::make_shared<float[]>(inputTensorSize[idx]));
+    // }
+    //blob = std::make_shared<float[]>(inputTensorSize[0]); // 这里是因为yolo输入维度只有1
+    blob = new float[inputTensorSize[0]];
 
     return true;
 }
@@ -201,18 +193,17 @@ bool OnnxruntimeInfer::initEnv(const std::string& modelPath) {
         std::cout << "Inference device: CPU" << std::endl;
     }
 
+    std::cout << "model path:" << modelPath.c_str() << "\n";
     session = Ort::Session(env, modelPath.c_str(), sessionOptions);
     return true;
 }
 
 
 
-OnnxruntimeInfer::OnnxruntimeInfer(const std::string& modelPath, const bool isGPU): OnnxruntimeAssets(), 
+OnnxruntimeInfer::OnnxruntimeInfer(const std::string& modelPath, const bool _isGPU): OnnxruntimeAssets(), 
                                                                         AbstractDetectAlgorithm()
 {    
     this->loadModel(modelPath);
-    //env = Ort::Env(OrtLoggingLevel::ORT_LOGGING_LEVEL_WARNING, m_assets.envDefaultName);
-    //sessionOptions = Ort.
 }
 
 OnnxruntimeInfer::~OnnxruntimeInfer() {
@@ -224,7 +215,7 @@ const std::vector<DetectionResultNode> OnnxruntimeInfer::detect(const cv::Mat& i
     std::vector<int64_t> inputTensorShape = this->inputTensorShape[0];
     this->preprocessing(image, inputTensorShape);
 
-    std::vector<float> inputTensorValues(blobs[0], blobs[0] + inputTensorSize[0]);
+    std::vector<float> inputTensorValues(blob, blob + inputTensorSize[0]);
 
     std::vector<Ort::Value> inputTensors;
 
@@ -253,7 +244,9 @@ const std::vector<DetectionResultNode> OnnxruntimeInfer::detect(const cv::Mat& i
                                                 outputTensors[0],
                                                 confThreshold, iouThreshold);
    
-   
+    
+    //delete blob;
+
     return result;
 
 }

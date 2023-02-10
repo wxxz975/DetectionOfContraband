@@ -6,7 +6,7 @@
 class OnnxruntimeAssets
 {
 public:
-    std::string modelPath = "yolov5s.onnx";
+    std::string modelDefaultPath = "yolov5s.onnx";
 
     Ort::Env env{nullptr};
     std::string envDefaultName = "ONNX_DETECTION";
@@ -41,11 +41,11 @@ public:
     bool isDynamicInputShape = false;
     //std::vector<std::string> classLabels;
 
-    std::vector<float*> blobs;
+    //std::shared_ptr<float[]> blob;
+    float *blob = nullptr;
+    //std::vector<std::shared_ptr<float[]>> blobs;
     std::vector<size_t> blobsSize;
     
-    float* blob = nullptr;
-    uint32_t blob_size = 0;
 public:
 
     OnnxruntimeAssets(){};
