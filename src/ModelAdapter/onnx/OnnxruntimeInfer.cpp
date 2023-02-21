@@ -154,10 +154,7 @@ bool OnnxruntimeInfer::initTensor() {
         outputTensorSize.push_back(OnnxruntimeUtils::vectorProduct(tenShape));
     }
 
-    // for(size_t idx = 0; idx < inputCount; ++idx) {
-    //     blobs.push_back(std::make_shared<float[]>(inputTensorSize[idx]));
-    // }
-    //blob = std::make_shared<float[]>(inputTensorSize[0]); // 这里是因为yolo输入维度只有1
+    // 这里是因为yolo输入维度只有1
     blob = new float[inputTensorSize[0]];
 
     return true;

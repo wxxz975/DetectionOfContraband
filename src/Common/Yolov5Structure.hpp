@@ -8,7 +8,7 @@
     struct = coordinate + confidence + class_confidence
     
 */
-#define YOLOV5_THIRD_DIM_SIZE 85 // 1*25200*85 的第三维度大小 
+#define YOLOV5_THIRD_DIM_SIZE 5 // 1*25200*85 的第三维度大小 
 
 
 

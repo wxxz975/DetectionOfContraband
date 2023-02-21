@@ -182,7 +182,6 @@ bool ui_Engine::setupUi(ui_AbstractEngine* parent) {
                 //m_algo->
             }
             if(action & AC_LOAD_IMAGE) {
-                std::cout << "detect image\n";
                 auto image = cv::imread(selctedPath);
                 this->m_result = m_algo->detect(image);
                 OnnxruntimeUtils::visualizeDetection(image, this->m_result, m_algo->m_labelNames);

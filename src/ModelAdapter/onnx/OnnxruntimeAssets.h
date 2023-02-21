@@ -41,9 +41,8 @@ public:
     bool isDynamicInputShape = false;
     //std::vector<std::string> classLabels;
 
-    //std::shared_ptr<float[]> blob;
     float *blob = nullptr;
-    //std::vector<std::shared_ptr<float[]>> blobs;
+    
     std::vector<size_t> blobsSize;
     
 public:
