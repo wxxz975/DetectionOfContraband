@@ -1,3 +1,4 @@
+
 #include <imgui/imgui.h>
 #include "UI/ui_Engine.h"
 #include "ModelAdapter/onnx/Utils.h"
@@ -48,7 +49,6 @@ void ui_Engine::OnDocking() const
     if (opt_fullscreen)
         ImGui::PopStyleVar(2);
 
-    // Submit the DockSpace
     ImGuiIO& io = ImGui::GetIO();
     if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
     {
@@ -133,13 +133,10 @@ bool ui_Engine::setupUi(ui_AbstractEngine* parent) {
 
             ImGui::PushItemWidth(100.0f);
             if (SliderFloat("confidence Threshold", &confThreshold, 0, 1)) {
-                // change the  out conf
-                //std::cout << "change confidence:" << confThreshold << "\n";
                 m_algo->confThreshold = confThreshold;
             }
             
             if (SliderFloat("iou Threshold", &iouThreshold, 0, 1)) {
-                //std::cout << "change iou:" << iouThreshold << "\n";
                 m_algo->iouThreshold = iouThreshold;
             }
             ImGui::PopItemWidth();
@@ -152,14 +149,14 @@ bool ui_Engine::setupUi(ui_AbstractEngine* parent) {
             Text("First. load model");
             Text("Second. select the picture to be reasoned"); NewLine();
 
-            if (Button("LoadModel", ImVec2(100, 80))) {
+            if (Button("LoadModel", ImVec2(120, 80))) {
                 fileDialog.SetTitle("please select a onnx model");
                 fileDialog.SetTypeFilters({ ".onnx" });
                 fileDialog.Open();
                 action |= AC_LOAD_MODEL;
             }
             SameLine();
-            if (Button("SelectImage", ImVec2(100, 80))) {
+            if (Button("SelectImage", ImVec2(120, 80))) {
                  //////// test
                 fileDialog.SetTitle("please select a image");
                 fileDialog.SetTypeFilters({".jpg", ".jpeg", ".png", ".bmp"});
@@ -176,24 +173,30 @@ bool ui_Engine::setupUi(ui_AbstractEngine* parent) {
 
         if (fileDialog.HasSelected()) {
             //std::cout << action << "\n";
-            auto selctedPath = fileDialog.GetSelected().string();
-            if(action & AC_LOAD_MODEL) {
-                std::cout << "load model\n";
-                //m_algo->
-            }
-            if(action & AC_LOAD_IMAGE) {
-                auto image = cv::imread(selctedPath);
-                this->m_result = m_algo->detect(image);
-                OnnxruntimeUtils::visualizeDetection(image, this->m_result, m_algo->m_labelNames);
-                if(0 != this->texId) {
-                    glDeleteTextures(1, &(this->texId));
-                }
-                this->texId = CreateTexture(image);
+            auto selectedPath = fileDialog.GetSelected().string();
+            switch(action) {
+              case AC_LOAD_MODEL:
+                {
+                  std::cout << "load model: "<< selectedPath.c_str() <<"\n";
+                  m_algo->reloadModel(selectedPath); 
 
+                }
+
+                case AC_LOAD_IMAGE: 
+                {
+                  auto image = cv::imread(selectedPath);
+                  m_result = m_algo->detect(image);
+                  OnnxruntimeUtils::visualizeDetection(image, m_result, m_algo->m_labelNames);
+                  if(0 != texId) {
+                    glDeleteTextures(1, &texId);
+                  }
+
+                  texId = CreateTextureFromImage(image);
+                }
             }
-            //std::cout << "Selected filename:" << fileDialog.GetSelected().string() << std::endl;
+           
             fileDialog.ClearSelected();
-            action &= 0;
+            action = 0;
         }
         
         End();

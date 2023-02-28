@@ -4,11 +4,13 @@ project(DetectionOfContraband)
 add_definitions(-std=c++17)
 add_definitions(-DAPI_EXPORTS)
 option(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 
-# onnxruntime
-set(onnxruntime_dir "/usr/local")
-include_directories(${onnxruntime_dir}/include/onnxruntime)
+
+# onnxruntime = v1.12.1 
+set(onnxruntime_dir "/usr/local/onnxruntime")
+include_directories(${onnxruntime_dir}/include)
+
 
 # opencv
 find_package(OpenCV REQUIRED)

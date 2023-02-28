@@ -42,9 +42,6 @@ const std::vector<DetectionResultNode> OnnxruntimeInfer::postprocessing(const cv
     size_t count = outputTensors.GetTensorTypeAndShapeInfo().GetElementCount();
     std::vector<float> output(rawOutput, rawOutput + count);
 
-    // for (const int64_t& shape : outputShape)
-    //     std::cout << "Output Shape: " << shape << std::endl;
-
     // first 5 elements are box[4] and obj confidence
     int numClasses = (int)outputShape[2] - 5;
     int elementsInBatch = (int)(outputShape[1] * outputShape[2]); // 它相当于只有一个batch, 这里取的ouput的withd*height
@@ -97,14 +94,22 @@ const std::vector<DetectionResultNode> OnnxruntimeInfer::postprocessing(const cv
 
 bool OnnxruntimeInfer::loadModel(const std::string& modelPath) {
     std::cout << "[+] init model ...\n";
-    assert(this->initEnv(modelPath));
-    assert(this->initLabels());
-    assert(this->initTensor());
+    bool valid = true;
+    valid = this->initEnv(modelPath);
+    valid = this->initLabels();
+    valid = this->initTensor();
 
     std::cout << "[+] model loaded.\n";
 
-    return true;
+    return valid;
 }
+
+bool OnnxruntimeInfer::reloadModel(const std::string& modelPath, const bool isGPU)
+{
+        this->isGPU = isGPU;
+        return this->loadModel(modelPath);
+};
+
 
 bool OnnxruntimeInfer::initLabels() {
     // maybe not exist the names`s lable
@@ -201,6 +206,7 @@ OnnxruntimeInfer::OnnxruntimeInfer(const std::string& modelPath, const bool _isG
                                                                         AbstractDetectAlgorithm()
 {    
     this->loadModel(modelPath);
+
 }
 
 OnnxruntimeInfer::~OnnxruntimeInfer() {

@@ -16,10 +16,9 @@ private:
     bool isActive = true;
     GLFWwindow* wind = nullptr;
     const char* WindowName = "ContrabandOfDetection";
-    ImVec2 windSize = {720.f,  320.f};
+    ImVec2 windSize = {1920.f,  1080.f};
 
-    //std::unique_ptr<ui_AbstractEngine> m_engine = std::make_unique<ui_Engine>();
-    float windowFontSacle = 1.2f;
+    float windowFontSacle = 1.4f;
 public:
     Application();
     ~Application() = default;
@@ -32,4 +31,3 @@ private:
     void postprocess() const;
 };
 
-//using App = std::unique_ptr<AbstractApplication>;

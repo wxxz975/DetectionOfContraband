@@ -16,10 +16,6 @@ private:
                                                     Ort::Value& outputTensors,
                                                     const float& confThreshold, const float& iouThreshold);
     bool loadModel(const std::string& modelPath);
-    inline bool reloadModel(const std::string& modelPath) {
-        return this->loadModel(modelPath);
-    };
-
 
     bool initLabels();
     bool initTensor();
@@ -30,5 +26,7 @@ public:
     OnnxruntimeInfer(const std::string& modelPath = "x_ray.onnx", const bool isGPU = true);
     ~OnnxruntimeInfer();
 
-    const std::vector<DetectionResultNode> detect(const cv::Mat &image) override; 
+    virtual bool reloadModel(const std::string& modelPath, const bool isGPU = true) override;
+    
+    virtual const std::vector<DetectionResultNode> detect(const cv::Mat &image) override; 
 };

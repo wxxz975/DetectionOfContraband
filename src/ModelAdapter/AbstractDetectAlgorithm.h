@@ -26,7 +26,8 @@ public:
     virtual ~AbstractDetectAlgorithm() = default;
 
     virtual const std::vector<DetectionResultNode> detect(const cv::Mat& image) = 0;
-
+    
+    virtual bool reloadModel(const std::string& modelPath, const bool isGPU = true) = 0; 
 };
 
 

@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
-#include "Common/Image.h"
+
+#include "Common/TextureLoader.h"
 #include "UI/ui_AbstractEngine.h"
 #include "UI/ui_EngineConfig.h"
 #include "UI/Widgets/ui_FileBrowser.h"
