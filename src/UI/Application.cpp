@@ -58,7 +58,8 @@ Application::Application(): AbstractApplication(), ui_Engine() {
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 
     // font setting 
-	io.Fonts->AddFontFromFileTTF("/home/wxxz/workspace/DetectionOfContraband/DejaVuSans.ttf", 15.0f);
+    ImFont* font = io.Fonts->AddFontFromFileTTF("/home/wxxz/workspace/DetectionOfContraband/DejaVuSans.ttf", 15.0f);
+    ImGui::GetIO().FontDefault =  font; 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 

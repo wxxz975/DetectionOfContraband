@@ -24,7 +24,7 @@ public:
     std::vector<const char*> inputNames;
     std::vector<const char*> outputNames;
     
-    std::vector<Ort::Value> inputTensors;
+    std::vector<Ort::Value> inputTensors; // place to session class
     std::vector<Ort::Value> outputTensors;
     
     std::vector<std::vector<int64_t>> inputTensorShape; // yolov5 only one input/ output
@@ -39,7 +39,6 @@ public:
     std::vector<ONNXTensorElementDataType> outputTensorType;
 
     bool isDynamicInputShape = false;
-    //std::vector<std::string> classLabels;
 
     float *blob = nullptr;
     
@@ -50,5 +49,4 @@ public:
     OnnxruntimeAssets(){};
     ~OnnxruntimeAssets(){};
 };
-
 
