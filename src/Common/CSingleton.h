@@ -2,12 +2,12 @@
 #include <mutex>
 #include <memory>
 
-template<typename _T, typename... _Args>
+template<typename _T>
 class CSingleton
 {
   public:
     
-    static _T& GetInstance(_Args&&... __Args) 
+    static _T& GetInstance() 
     {
       static std::once_flag s_flag;
       std::call_once(s_flag, 

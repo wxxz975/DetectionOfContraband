@@ -1,5 +1,5 @@
-#include "Classic.h"
-#include <imgui/imgui.h>
+#include "UI/Style/Styling/Classic.h"
+#include "UI/Style/Styling/AStyle.h"
 
 void Classic::apply()
 {

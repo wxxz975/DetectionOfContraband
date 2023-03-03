@@ -29,6 +29,8 @@ target_link_libraries(ImGui dl)
 # main 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
+
+#file(GLOB_RECURSE MAIN_SRC ${PROJECT_SOURCE_DIR}/src/*.cpp)
 file(GLOB_RECURSE COMMON_SRC ${PROJECT_SOURCE_DIR}/src/Common/*.cpp)
 add_library(COMMON STATIC ${COMMON_SRC})
 
@@ -38,20 +40,28 @@ add_library(MODEL STATIC ${MODEL_SRC})
 add_library(FILE_BROWSER STATIC ${PROJECT_SOURCE_DIR}/src/UI/Widgets/ui_FileBrowser.cpp)
 target_link_libraries(FILE_BROWSER ImGui GL glfw)
 
-file(GLOB_RECURSE UI_SRC ${PROJECT_SOURCE_DIR}/src/UI/*.cpp)
-add_library(UI STATIC ${UI_SRC})
-target_link_libraries(UI MODEL COMMON ImGui FILE_BROWSER)
 
-#foreach(name IN LISTS UI_OBJ)
-#    message(STATUS "UI obj: " ${name})
-#endforeach()
+file(GLOB_RECURSE STYLE_SRC ${PROJECT_SOURCE_DIR}/src/UI/Style/*.cpp)
+add_library(STYLE STATIC ${STYLE_SRC})
+target_link_libraries(STYLE ImGui)
+
+file(GLOB UI_SRC ${PROJECT_SOURCE_DIR}/src/UI/*.cpp)
+add_library(UI STATIC ${UI_SRC})
+target_link_libraries(UI MODEL COMMON FILE_BROWSER)
+
+
+
+foreach(name IN LISTS STYLE_SRC)
+  message(STATUS "MAIN obj: " ${name})
+endforeach()
 
 add_executable(${PROJECT_NAME}
     src/main.cpp
+    #${MAIN_SRC} 
 )
 
 
 target_link_libraries(${PROJECT_NAME} 
-        UI ${OpenCV_LIBS} "${onnxruntime_dir}/lib/libonnxruntime.so")
+  UI STYLE ${OpenCV_LIBS} "${onnxruntime_dir}/lib/libonnxruntime.so")
 
 

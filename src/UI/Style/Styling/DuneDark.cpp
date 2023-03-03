@@ -1,5 +1,5 @@
-#include "DuneDark.h"
-#include <imgui/imgui.h>
+#include "UI/Style/Styling/DuneDark.h"
+#include "UI/Style/Styling/AStyle.h"
 
 void DuneDark::apply() 
 {

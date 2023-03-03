@@ -1,7 +1,5 @@
-#include "Dark.h"
-#include <imgui/imgui.h>
-
-
+#include "UI/Style/Styling/Dark.h"
+#include "UI/Style/Styling/AStyle.h"
 
 void Dark::apply() 
 {

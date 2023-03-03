@@ -1,6 +1,6 @@
 #pragma once
-#include "AStyle.h"
 
+#include "UI/Style/Styling/AStyle.h"
 
 class Dark: public AStyle
 {

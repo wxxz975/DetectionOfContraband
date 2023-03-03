@@ -2,9 +2,11 @@
 #include <cassert>
 #include <cstdio>
 
-
 #include <opencv2/opencv.hpp>
 
+// test start
+#include "UI/Style/Styling//StyleManager.h"
+// test end
 
 
 static void glfw_error_callback(int error, const char* description)
@@ -61,8 +63,9 @@ Application::Application(): AbstractApplication(), ui_Engine() {
     ImFont* font = io.Fonts->AddFontFromFileTTF("/home/wxxz/workspace/DetectionOfContraband/DejaVuSans.ttf", 15.0f);
     ImGui::GetIO().FontDefault =  font; 
     // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-
+    //StyleManager::GetInstance().SetStyle(DcUI::Styling::EStyle::ALTERNATIVE_DARK);
+    //ImGui::StyleColorsClassic();
+    
 
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
     ImGuiStyle& style = ImGui::GetStyle();
@@ -84,18 +87,22 @@ Application::Application(): AbstractApplication(), ui_Engine() {
 
 bool Application::run()
 {
-    //assert(_ui_func != 0);
-    while(!glfwWindowShouldClose(this->wind) && this->isActive) 
-    {
-        this->preprocess();
-    
-        this->setupUi();
-     
-        this->postprocess();
-    }
-   
 
-    return true;
+
+ // StyleManager mgr;
+  //mgr.SetStyle(DcUI::Styling::EStyle::DUNE_DARK_STYLE);
+  //assert(_ui_func != 0);
+  while(!glfwWindowShouldClose(this->wind) && this->isActive) 
+  {
+    this->preprocess();
+
+    this->setupUi();
+
+    this->postprocess();
+  }
+
+
+  return true;
 }
 
 void Application::preprocess() const {

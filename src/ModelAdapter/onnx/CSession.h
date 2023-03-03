@@ -1,10 +1,13 @@
 #pragma once
 #include <core/session/onnxruntime_cxx_api.h>
 #include <string>
-#include <vector>
+#include <vector> 
+#include <memory>
+
 class CSession
 {
   public:
+    CSession() = delete;
     CSession(const std::string& p_modelpath);
     ~CSession() = default;
 
@@ -12,8 +15,9 @@ class CSession
     void setRunningThread(int _num);
      
   private: 
-    // ort session 
-    Ort::Session session; 
+    
+
+    std::unique_ptr<Ort::Session> m_pSession;
     Ort::Env env{nullptr};
     std::string envDefaultName = "OnnxDetection";
     Ort::SessionOptions sessionOptions{nullptr};
