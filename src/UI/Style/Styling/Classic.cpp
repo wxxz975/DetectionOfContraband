@@ -1,7 +1,6 @@
 #include "UI/Style/Styling/Classic.h"
-#include "UI/Style/Styling/AStyle.h"
 
-void Classic::apply()
+void DcUI::Style::Styling::Classic::apply()
 {
   ImGui::StyleColorsClassic();
 }

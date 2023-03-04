@@ -9,7 +9,7 @@
 #include "UI/Style/Styling/AlternativeDark.h"
 #include "UI/Style/Styling/DuneDark.h"
 
-StyleManager::~StyleManager()
+DcUI::Style::StyleManager::~StyleManager()
 {
   if(style != nullptr) {
     delete style;
@@ -19,7 +19,7 @@ StyleManager::~StyleManager()
 
 
 // TODO: this violate opening and closing  principle
-void StyleManager::SetStyle(DcUI::Styling::EStyle _style)
+void DcUI::Style::StyleManager::SetStyle(DcUI::Styling::EStyle _style)
 {
   if(style != nullptr) delete style;
   

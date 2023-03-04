@@ -1,7 +1,6 @@
 #include "UI/Style/Styling/AlternativeDark.h"
-#include "UI/Style/Styling/AStyle.h"
 
-void AlternativeDark::apply()
+void DcUI::Style::Styling::AlternativeDark::apply()
 {
   ImGuiStyle* style = &ImGui::GetStyle();
   style->WindowPadding = ImVec2(15, 15);

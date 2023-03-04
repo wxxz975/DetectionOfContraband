@@ -1,7 +1,7 @@
 
 #pragma once 
 
-namespace DcUI::Styling {
+namespace DcUI::Style::Styling {
 
   enum class EStyle 
   {

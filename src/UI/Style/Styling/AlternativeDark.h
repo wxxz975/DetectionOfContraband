@@ -1,13 +1,16 @@
 #pragma once
 #include "UI/Style/Styling/AStyle.h"
 
-
-class AlternativeDark: public AStyle
+namespace DcUI::Style::Styling
 {
-  public:
-    AlternativeDark() = default;
-    virtual ~AlternativeDark() = default;
+  class AlternativeDark: public AStyle
+  {
+    public:
+      AlternativeDark() = default;
+      virtual ~AlternativeDark() = default;
 
 
-    virtual void apply() override;
-};
+      virtual void apply() override;
+  };
+
+}

@@ -1,7 +1,7 @@
 #include "UI/Style/Styling/Light.h"
 #include "UI/Style/Styling/AStyle.h"
 
-void Light::apply()
+void DcUI::Style::Styling::Light::apply()
 {
   ImGui::StyleColorsLight();
 }

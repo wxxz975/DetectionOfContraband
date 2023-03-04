@@ -4,7 +4,7 @@
 #include "Common/TextureLoader.h"
 #include "UI/ui_AbstractEngine.h"
 #include "UI/ui_EngineConfig.h"
-#include "UI/Widgets/ui_FileBrowser.h"
+#include "UI/Widgets/External/ui_FileBrowser.h"
 #include "ModelAdapter/onnx/OnnxruntimeInfer.h"
 
 class OnnxruntimeInfer;
@@ -12,7 +12,7 @@ class OnnxruntimeInfer;
 class ui_Engine: public ui_AbstractEngine
 {
 private:
-    std::shared_ptr<ui_EngineAbstractConfig> m_config = std::make_shared<ui_EngineConfig>();
+    //std::shared_ptr<ui_EngineAbstractConfig> m_config = std::make_shared<ui_EngineConfig>();
 
     std::unique_ptr<AbstractDetectAlgorithm> m_algo = std::make_unique<OnnxruntimeInfer>("x_ray.onnx", true);
 

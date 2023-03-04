@@ -7,7 +7,6 @@
 class CSession
 {
   public:
-    CSession() = delete;
     CSession(const std::string& p_modelpath);
     ~CSession() = default;
 

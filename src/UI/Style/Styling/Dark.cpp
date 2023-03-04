@@ -1,7 +1,6 @@
 #include "UI/Style/Styling/Dark.h"
-#include "UI/Style/Styling/AStyle.h"
 
-void Dark::apply() 
+void DcUI::Style::Styling::Dark::apply() 
 {
   ImGui::StyleColorsDark();
 }

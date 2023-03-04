@@ -1,12 +1,14 @@
 #pragma once 
 #include "UI/Style/Styling/AStyle.h"
 
-
-class Classic: public AStyle
+namespace DcUI::Style::Styling
 {
-  public: 
-    Classic() = default;
-    virtual ~Classic() = default;
+  class Classic: public AStyle
+  {
+    public: 
+      Classic() = default;
+      virtual ~Classic() = default;
 
-    virtual void apply() override;
-};
+      virtual void apply() override;
+  };
+}

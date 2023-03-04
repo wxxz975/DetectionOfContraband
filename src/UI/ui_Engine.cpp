@@ -43,6 +43,7 @@ void ui_Engine::OnDocking() const
     if (!opt_padding)
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
     ImGui::Begin("DockSpace Demo", nullptr, window_flags);
+    
     if (!opt_padding)
         ImGui::PopStyleVar();
 

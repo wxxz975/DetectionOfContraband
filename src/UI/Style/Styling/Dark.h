@@ -2,12 +2,15 @@
 
 #include "UI/Style/Styling/AStyle.h"
 
-class Dark: public AStyle
+namespace DcUI::Style::Styling
 {
-  public:
-    Dark() = default;
-    virtual ~Dark() = default;
+  class Dark: public AStyle
+  {
+    public:
+      Dark() = default;
+      virtual ~Dark() = default;
 
-    virtual void apply() override;
+      virtual void apply() override;
 
-};
+  };
+}

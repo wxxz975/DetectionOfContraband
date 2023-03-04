@@ -1,11 +1,10 @@
-#include "UI/Application.h"
+#include "Core/Application.h"
 #include <cassert>
 #include <cstdio>
 
 #include <opencv2/opencv.hpp>
 
 // test start
-#include "UI/Style/Styling//StyleManager.h"
 // test end
 
 

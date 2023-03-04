@@ -40,11 +40,15 @@ const std::vector<DetectionResultNode> OnnxruntimeInfer::postprocessing(const cv
     auto* rawOutput = outputTensors.GetTensorData<float>();
     std::vector<int64_t> outputShape = outputTensors.GetTensorTypeAndShapeInfo().GetShape();
     size_t count = outputTensors.GetTensorTypeAndShapeInfo().GetElementCount();
+     
+    // this will copy rawOutput memory 2 output
     std::vector<float> output(rawOutput, rawOutput + count);
+
 
     // first 5 elements are box[4] and obj confidence
     int numClasses = (int)outputShape[2] - 5;
-    int elementsInBatch = (int)(outputShape[1] * outputShape[2]); // 它相当于只有一个batch, 这里取的ouput的withd*height
+    int elementsInBatch = (int)(outputShape[1] * outputShape[2]);
+    // 它相当于只有一个batch, 这里取的ouput的withd*height
 
 
     for (auto it = output.begin(); it != output.begin() + elementsInBatch; it += outputShape[2])

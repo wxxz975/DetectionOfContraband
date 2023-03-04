@@ -1,6 +1,7 @@
 #include "FontManager.h"
 
-bool FontManager::LoadFont(const std::string& p_id, 
+
+bool DcUI::Style::FontManager::LoadFont(const std::string& p_id, 
     const std::string& p_path, 
     float p_fontSize)
 {
@@ -19,7 +20,7 @@ bool FontManager::LoadFont(const std::string& p_id,
   return false;
 }
 
-bool FontManager::UnloadFont(const std::string& p_id)
+bool DcUI::Style::FontManager::UnloadFont(const std::string& p_id)
 {
   if(m_fonts.find(p_id) != m_fonts.end())
   {
@@ -30,7 +31,7 @@ bool FontManager::UnloadFont(const std::string& p_id)
   return false;
 }
 
-bool FontManager::UseFont(const std::string& p_id)
+bool DcUI::Style::FontManager::UseFont(const std::string& p_id)
 {
   auto foundFont = m_fonts.find(p_id);
 
