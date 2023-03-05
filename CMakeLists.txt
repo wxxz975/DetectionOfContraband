@@ -34,10 +34,10 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 file(GLOB_RECURSE COMMON_SRC ${PROJECT_SOURCE_DIR}/src/Common/*.cpp)
 add_library(COMMON STATIC ${COMMON_SRC})
 
-file(GLOB_RECURSE MODEL_SRC ${PROJECT_SOURCE_DIR}/src/ModelAdapter/*.cpp)
+file(GLOB_RECURSE MODEL_SRC ${PROJECT_SOURCE_DIR}/src/OnnxModelAdapter/*.cpp)
 add_library(MODEL STATIC ${MODEL_SRC})
 
-add_library(FILE_BROWSER STATIC ${PROJECT_SOURCE_DIR}/src/UI/Widgets/ui_FileBrowser.cpp)
+add_library(FILE_BROWSER STATIC ${PROJECT_SOURCE_DIR}/src/UI/Widgets/External/ui_FileBrowser.cpp)
 target_link_libraries(FILE_BROWSER ImGui GL glfw)
 
 
