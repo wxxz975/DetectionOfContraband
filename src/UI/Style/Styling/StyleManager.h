@@ -2,7 +2,7 @@
 
 #include "UI/Style/Styling/AStyle.h"
 
-namespace DcUI::Style
+namespace DcUI::Style::Styling
 {
 
   class StyleManager/*: public CSingleton<StyleManager>*/
@@ -11,7 +11,7 @@ namespace DcUI::Style
       StyleManager() = default;
       ~StyleManager();
 
-      void SetStyle(DcUI::Styling::EStyle _style);
+      void SetStyle(Styling::EStyle _style);
 
     private:
       AStyle *style = nullptr;

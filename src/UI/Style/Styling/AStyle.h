@@ -1,6 +1,6 @@
 #pragma once
 #include <imgui/imgui.h>
-#include "UI/Style/Styling//Styling.h"
+#include "UI/Style/Styling/Styling.h"
 
 namespace DcUI::Style::Styling
 {

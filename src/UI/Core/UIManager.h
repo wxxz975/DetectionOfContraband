@@ -4,7 +4,7 @@
 #include <imgui/imgui_impl_glfw.h>
 #include "UI/Style/Styling/StyleManager.h"
 #include "UI/Style/UIFont/FontManager.h"
-
+#include "UI/Modules/Canvas.h"
 
 namespace DcUI::Core
 {
@@ -46,23 +46,32 @@ namespace DcUI::Core
        * */
       Style::FontManager& GetFontManager();
 
-      
-
+    
       /*
        * Defines the canvas to use
        * @param p_canvas
        * */
-       void SetCanvas();
+       void SetCanvas(Modules::Canvas& p_canvas);
 
+       /*
+        * Stop considering the current canvas
+        * */
+       void RemoveCanvas();
+
+       /*
+        * Render ImGui current frame
+        * */
+       void Render();
 
 
     private:
-      Style::StyleManager m_styleMgr;
+      Style::Styling::StyleManager m_styleMgr;
       Style::FontManager m_fontMgr;
-      
+     
+      Modules::Canvas* m_currentCanvas = nullptr;
       std::string m_layoutSaveFilename = "imgui.ini";
 
-     // TODO:canvas 
+      bool m_dockingState;
   };
 
 

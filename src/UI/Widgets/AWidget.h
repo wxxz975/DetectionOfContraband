@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "UI/API/IDrawable.h"
 #include "UI/Plugins/Pluginable.h"
+#include "UI/Internal/WidgetContainer.h"
 
 namespace DcUI::Widgets
 {
