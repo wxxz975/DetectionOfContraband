@@ -2,13 +2,17 @@
 
 
 
-const std::vector<std::string>& Model::GetClassNames() const
+const std::vector<std::string>& Resources::Model::GetClassNames() const
 {
-  return this->m_classNames;
+  return m_classNames;
 }
 
-
-const std::vector<std::vector<int64_t>>& Model::GetDimenssion() const 
+const std::vector<Resources::Model::OneDimension>& Resources::Model::GetInputDimenssion() const
 {
-  //return this->m_dimenssion; 
+  return m_inputDim;
+}
+
+const std::vector<Resources::Model::OneDimension>& Resources::Model::GetOutputDimenssion() const 
+{
+  return m_outputDim; 
 }

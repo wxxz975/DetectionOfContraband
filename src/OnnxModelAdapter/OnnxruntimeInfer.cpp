@@ -118,6 +118,8 @@ bool OnnxruntimeInfer::reloadModel(const std::string& modelPath, const bool isGP
 bool OnnxruntimeInfer::initLabels() {
     // maybe not exist the names`s lable
     auto metadata = session.GetModelMetadata();
+    //metadata.GetOutputName();
+
     auto namesRaw = metadata.LookupCustomMetadataMapAllocated("names", allocator);
     printf("labels:%s\n", namesRaw.get());
 

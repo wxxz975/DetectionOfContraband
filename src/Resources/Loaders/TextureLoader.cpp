@@ -1,10 +1,10 @@
 #include "Resources/Loaders/TextureLoader.h"
-#include "stb/stb_image.h"
+#include <stb/stb_image.h>
 #include <GL/gl.h>
 
 
 
-Texture* TextureLoader::CreateFromFile(const std::string& p_filepath, 
+Resources::Texture* Resources::Loaders::TextureLoader::CreateFromFile(const std::string& p_filepath, 
         TextureFilteringMode p_firstFilter, TextureFilteringMode p_secondFilter)
 {
   GLuint textureID;
@@ -43,7 +43,7 @@ Texture* TextureLoader::CreateFromFile(const std::string& p_filepath,
   }
 }
 
-Texture* TextureLoader::CreateFromMemory(uint8_t* p_data, uint32_t p_width, uint32_t p_height,
+Resources::Texture* Resources::TextureLoader::CreateFromMemory(uint8_t* p_data, uint32_t p_width, uint32_t p_height,
         TextureFilteringMode p_firstFilter, TextureFilteringMode p_secondFilter)
 {
   GLuint textureID;
@@ -61,10 +61,10 @@ Texture* TextureLoader::CreateFromMemory(uint8_t* p_data, uint32_t p_width, uint
 
   glBindTexture(GL_TEXTURE_2D, 0);
 
-  return new Texture("", textureID, 1, 1, p_firstFilter, p_secondFilter);
+  return new Resources::Texture("", textureID, 1, 1, p_firstFilter, p_secondFilter);
 }
 
-void TextureLoader::Reload(Texture& p_texture, const std::string& p_filepath,
+void Resources::TextureLoader::Reload(Texture& p_texture, const std::string& p_filepath,
         TextureFilteringMode p_firstFilter, TextureFilteringMode p_secondFilter)
 {
   Texture* newTexture = CreateFromFile(p_filepath.c_str(), p_firstFilter, p_secondFilter);
@@ -83,7 +83,7 @@ void TextureLoader::Reload(Texture& p_texture, const std::string& p_filepath,
 }
 
 
-bool TextureLoader::Destory(Texture*& p_textureInstance)
+bool Resources::TextureLoader::Destory(Texture*& p_textureInstance)
 {
   if(p_textureInstance)
   {

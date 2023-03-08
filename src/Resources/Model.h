@@ -8,52 +8,60 @@
 /*
  *  TODO: split the class task
  * */
-
-class Model
+namespace Resources
 {
-  friend class ModelLoader;
-  
-  public:
-    
-  /*
-   * Return the class names
-   * */
-  const std::vector<std::string>& GetClassNames() const;
- 
+  class Model
+  {
+    friend class ModelLoader;
 
-  /*
-   * Return the model`s dimemsion
-   * */
-  const std::vector<std::vector<int64_t>>& GetDimenssion() const; 
+    public:
+      //                   < DimensionName, DimensionShape>
+      using  OneDimension = std::pair<std::string, std::vector<int64_t>>;
+
+      //          <input/outputDataPointer, SizeOfBlob>
+      template<typename T>
+      using Blob = std::pair<std::shared_ptr<T[]>, size_t>; 
+
+      typedef std::vector<Blob<float>> Blobs;
 
 
-  private:
-    Model(const std::string& p_modelpath);
-    ~Model();
+    public:
 
-  public:
-    const std::string path;
+      /*
+      * Return the model`s label
+      * */
+      const std::vector<std::string>& GetClassNames() const;
 
-  public:
-    //                   < DimensionName, DimensionShape>
-    using  OneDimension = std::pair<std::string, std::vector<int64_t>>;
-    
-    //          <input/outputDataPointer, SizeOfBlob>
-    template<typename T>
-    using Blob = std::pair<std::shared_ptr<T[]>, size_t>; 
 
-    //typedef std::pair<std::shared_ptr<>>
-  private:
-    std::vector<std::string> m_classNames;
-   
-    std::vector<OneDimension> m_inputDim;
-    std::vector<OneDimension> m_outputDim;
-
+      /*
+      * Return the model`s input dimemsion
+      * */
+      const std::vector<OneDimension>& GetInputDimenssion() const; 
      
-    bool isDynamicInputShape = false;
- 
-    // default using float type
-    std::vector<Blob<float>> blobs;
+      /*
+       * Return the model`s output dimenssion
+       * */ 
+      const std::vector<OneDimension>& GetOutputDimenssion() const;
 
-};
+    private:
+      Model(const std::string& p_modelpath);
+      ~Model() = default;
 
+    public:
+      // model path
+      const std::string modelPath;
+    private:
+      
+      std::vector<std::string> m_classNames;
+
+      std::vector<OneDimension> m_inputDim;
+      std::vector<OneDimension> m_outputDim;
+
+
+      bool isDynamicInputShape = false;
+
+      // default using float type
+      Blobs blobs;
+
+  };
+}
