@@ -38,6 +38,8 @@ file(GLOB_RECURSE MODEL_SRC ${PROJECT_SOURCE_DIR}/src/OnnxModelAdapter/*.cpp)
 add_library(MODEL STATIC ${MODEL_SRC})
 
 add_library(FILE_BROWSER STATIC ${PROJECT_SOURCE_DIR}/src/UI/Widgets/External/ui_FileBrowser.cpp)
+
+# opengl 
 target_link_libraries(FILE_BROWSER ImGui GL glfw)
 
 

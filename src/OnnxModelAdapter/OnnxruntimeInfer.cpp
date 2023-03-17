@@ -2,6 +2,8 @@
 #include "TensorHelper.h"
 #include "Utils.h"
 #include <cassert>
+#include <opencv2/opencv.hpp>
+
 
 
 void OnnxruntimeInfer::preprocessing(const cv::Mat &image, std::vector<int64_t>& inputTensorShape) {
@@ -18,7 +20,7 @@ void OnnxruntimeInfer::preprocessing(const cv::Mat &image, std::vector<int64_t>&
      
     cv::Size floatImageSize {floatImage.cols, floatImage.rows};
    
-    // hwc -> chw
+    // hwc -> chw(height width channels)
     std::vector<cv::Mat> chw(floatImage.channels());
     for (int i = 0; i < floatImage.channels(); ++i)
     {
@@ -27,6 +29,7 @@ void OnnxruntimeInfer::preprocessing(const cv::Mat &image, std::vector<int64_t>&
     cv::split(floatImage, chw);
 
 }
+
 
 const std::vector<DetectionResultNode> OnnxruntimeInfer::postprocessing(const cv::Size& resizedImageShape,
                     const cv::Size& originalImageShape,
@@ -41,7 +44,7 @@ const std::vector<DetectionResultNode> OnnxruntimeInfer::postprocessing(const cv
     std::vector<int64_t> outputShape = outputTensors.GetTensorTypeAndShapeInfo().GetShape();
     size_t count = outputTensors.GetTensorTypeAndShapeInfo().GetElementCount();
      
-    // this will copy rawOutput memory 2 output
+    // this will copy rawOutput memory to output
     std::vector<float> output(rawOutput, rawOutput + count);
 
 
@@ -51,7 +54,9 @@ const std::vector<DetectionResultNode> OnnxruntimeInfer::postprocessing(const cv
     // 它相当于只有一个batch, 这里取的ouput的withd*height
 
 
-    for (auto it = output.begin(); it != output.begin() + elementsInBatch; it += outputShape[2])
+    for (auto it = output.begin(); 
+        it != output.begin() + elementsInBatch; 
+        it += outputShape[2])
     {
         float clsConf = it[4];
 
@@ -110,8 +115,8 @@ bool OnnxruntimeInfer::loadModel(const std::string& modelPath) {
 
 bool OnnxruntimeInfer::reloadModel(const std::string& modelPath, const bool isGPU)
 {
-        this->isGPU = isGPU;
-        return this->loadModel(modelPath);
+  this->isGPU = isGPU;
+  return this->loadModel(modelPath);
 };
 
 
@@ -220,6 +225,19 @@ OnnxruntimeInfer::~OnnxruntimeInfer() {
 }
 
 
+void detect(const std::vector<cv::Mat>& images)
+{
+  for(const cv::Mat& image : images)
+  {
+    // TODO : m_pMod read this model`s shape and inputTensor
+    // preprocessing the image` data and push them into the inputTensors
+  }
+  // Detect ...
+
+  // postprocessing(include read output, nms, push them into result box) 
+  // the image and return the result 
+}
+
 const std::vector<DetectionResultNode> OnnxruntimeInfer::detect(const cv::Mat& image) {
     std::vector<int64_t> inputTensorShape = this->inputTensorShape[0];
     this->preprocessing(image, inputTensorShape);
@@ -228,7 +246,9 @@ const std::vector<DetectionResultNode> OnnxruntimeInfer::detect(const cv::Mat& i
 
     std::vector<Ort::Value> inputTensors;
 
-    Ort::MemoryInfo memoryInfo = Ort::MemoryInfo::CreateCpu(OrtAllocatorType::OrtDeviceAllocator, OrtMemType::OrtMemTypeCPUInput);
+    Ort::MemoryInfo memoryInfo = 
+      Ort::MemoryInfo::CreateCpu(OrtAllocatorType::OrtDeviceAllocator, 
+          OrtMemType::OrtMemTypeCPUInput);
     
     
     inputTensors.push_back(Ort::Value::CreateTensor<float>(

@@ -2,13 +2,12 @@
 #include <stdint.h>
 #include <string>
 #include "Loaders/TextureFilteringMode.h"
-#include "Resources/Loaders/TextureLoader.h"
 
 namespace Resources
 {
   class Texture
   {
-    friend class Resources::Loaders::TextureLoader;
+    friend class TextureLoader;
     public:
     /*
      * Bind the texture to the given slot

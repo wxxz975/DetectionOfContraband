@@ -21,7 +21,8 @@ namespace Yolvo5RawPtr {
         // central x, central y, width, height
         T cx, cy, w, h;
         T box_confidence;
-        T class_conf[YOLOV5_THIRD_DIM_SIZE]; // 输出的大小和训练的模型类别相关 = 类别数量 + 5(1*25200*85)
+        T class_conf[YOLOV5_THIRD_DIM_SIZE]; 
+        // 输出的大小和训练的模型类别相关 = 类别数量 + 5(1*25200*85)
     };
 
     using fYolov5Ptr = Yolov5RawOuputStructure<float>*;

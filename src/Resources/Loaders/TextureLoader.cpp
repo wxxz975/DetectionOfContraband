@@ -4,7 +4,7 @@
 
 
 
-Resources::Texture* Resources::Loaders::TextureLoader::CreateFromFile(const std::string& p_filepath, 
+Resources::Texture* Resources::TextureLoader::CreateFromFile(const std::string& p_filepath, 
         TextureFilteringMode p_firstFilter, TextureFilteringMode p_secondFilter)
 {
   GLuint textureID;

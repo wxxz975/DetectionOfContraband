@@ -28,7 +28,7 @@ size_t OnnxruntimeUtils::vectorProduct(const std::vector<int64_t>& vector)
     return product;
 }
 
-
+// used to resize image size
 void OnnxruntimeUtils::letterbox(const cv::Mat& image, cv::Mat& outImage,
                       const cv::Size& newShape = cv::Size(640, 640),
                       const cv::Scalar& color = cv::Scalar(114, 114, 114),
@@ -80,7 +80,7 @@ void OnnxruntimeUtils::letterbox(const cv::Mat& image, cv::Mat& outImage,
     cv::copyMakeBorder(outImage, outImage, top, bottom, left, right, cv::BORDER_CONSTANT, color);
 }
 
-
+// find the coordinates of the object in the original image
 void OnnxruntimeUtils::scaleCoords(const cv::Size& imageShape, cv::Rect& coords, const cv::Size& imageOriginalShape)
 {
     float gain = std::min((float)imageShape.height / (float)imageOriginalShape.height,
@@ -96,6 +96,25 @@ void OnnxruntimeUtils::scaleCoords(const cv::Size& imageShape, cv::Rect& coords,
     coords.height = (int) std::round(((float)coords.height / gain));
 }
 
+// get the coordinates in the original image
+void GetOriCoords(const cv::Size& currentShape, 
+    const cv::Size& originalShape, cv::Rect& outCoords)
+{
+  float gain = std::min((float)currentShape.height / (float)originalShape.height,
+                        (float)currentShape.width / (float)originalShape.width);
+
+  int pad[2] = {
+    (int) (((float)currentShape.width - (float)originalShape.width * gain) / 2.0f),
+    (int) (((float)currentShape.height - (float)originalShape.height * gain) / 2.0f)
+  };
+
+  outCoords.x = (int) std::round(((float)(outCoords.x - pad[0]) / gain));
+  outCoords.y = (int) std::round(((float)(outCoords.y - pad[1]) / gain));
+
+  outCoords.width = (int) std::round(((float)outCoords.width / gain));
+  outCoords.height = (int) std::round(((float)outCoords.height / gain));
+
+}
 
 void OnnxruntimeUtils::getBestClassInfo(std::vector<float>::iterator it, const int& numClasses,
                                     float& bestConf, int& bestClassId) {

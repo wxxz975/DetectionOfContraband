@@ -20,7 +20,7 @@ namespace Common::Eventing
   /**
    * A simple event that contains a set of function callbacks. These functions will be called on invoke
    */
-    template<class... ArgTypes>
+  template<class... ArgTypes>
     class Event
     {
       public:
@@ -77,4 +77,4 @@ namespace Common::Eventing
     };
 }
 
-#include "Event.inl"
+#include "Common/Eventing/Event.inl"

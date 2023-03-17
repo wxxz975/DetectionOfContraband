@@ -1,14 +1,57 @@
 #include "Resources/Loaders/ModelLoader.h"
 
 
-Resources::Model* Resources::Loaders::ModelLoader::LoadModel(const std::string& p_modelPath)
+Resources::Model* Resources::ModelLoader::LoadModel(const Ort::Session& p_session)
 {
-  Resources::Model *mod = new Resources::Model(p_modelPath);
+  auto labels = ModelLoader::ParseClassNames(p_session);
+  Ort::AllocatorWithDefaultOptions allocator;
 
+  size_t inputCount = p_session.GetInputCount();
+  size_t outputCount = p_session.GetOutputCount();
+  
+  Model::Blobs blobs;
+
+  std::vector<Model::OneDimension> inputDim(inputCount);
+  std::vector<Model::OneDimension> outputDim(outputCount);
+  for(size_t idx = 0; idx < inputCount; ++idx) {
+
+    const char* inputname = p_session.GetInputName(idx, allocator);
+    
+    Ort::TypeInfo inputTypeInfo = p_session.GetInputTypeInfo(idx); 
+    
+    auto TypeAndShape = inputTypeInfo.GetTensorTypeAndShapeInfo();
+    
+    ONNXTensorElementDataType eleType = TypeAndShape.GetElementType(); 
+    std::vector<int64_t> tenShape = TypeAndShape.GetShape();
+    
+    uint64_t inputTensorSize = VectorProduct(tenShape);
+
+    inputDim.push_back({inputname, inputTensorSize, tenShape, eleType});
+    blobs.push_back(new float[inputTensorSize]);
+  }
+
+  //std::cout << "output dimension: " << outputCount << "\n";
+  for(size_t idx = 0; idx < outputCount; ++idx) {
+    char* outputName = p_session.GetOutputName(idx, allocator);
+
+    Ort::TypeInfo outputTypeInfo = p_session.GetOutputTypeInfo(idx);
+
+    auto TypeAndShape = outputTypeInfo.GetTensorTypeAndShapeInfo();
+
+    ONNXTensorElementDataType eleType = TypeAndShape.GetElementType();
+    std::vector<int64_t> tenShape = TypeAndShape.GetShape();
+    
+    uint64_t outputTensorSize = VectorProduct(tenShape);
+  
+    outputDim.push_back({outputName, outputTensorSize, tenShape, eleType});
+  }
+
+
+  return new Model(labels, inputDim, outputDim, blobs);
 }
 
 
-std::vector<std::string> ParseClassNames(Ort::Session p_session)
+std::vector<std::string> Resources::ModelLoader::ParseClassNames(const Ort::Session& p_session)
 {
   std::vector<std::string> result;  
   Ort::AllocatorWithDefaultOptions allocator;
@@ -50,3 +93,14 @@ std::vector<std::string> ParseClassNames(Ort::Session p_session)
   return result;
 }
 
+size_t Resources::ModelLoader::VectorProduct(const std::vector<int64_t>& vector)
+{
+    if (vector.empty())
+        return 0;
+
+    size_t product = 1;
+    for (const auto& element : vector)
+        product *= element;
+
+    return product;
+}

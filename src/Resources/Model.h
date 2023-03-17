@@ -5,8 +5,9 @@
 #include <memory>
 #include <core/session/onnxruntime_cxx_api.h>
 
+
 /*
- *  TODO: split the class task
+ *  
  * */
 namespace Resources
 {
@@ -15,14 +16,26 @@ namespace Resources
     friend class ModelLoader;
 
     public:
-      //                   < DimensionName, DimensionShape>
-      using  OneDimension = std::pair<std::string, std::vector<int64_t>>;
+
+    // some infomation of single dimension 
+    struct DimensionInfomation
+    {
+      std::string dimName;
+      size_t tensorSize;
+      std::vector<int64_t> tensor;
+      ONNXTensorElementDataType type;
+    };
+
+    using DimInfo = struct DimensionInfomation; 
+
+    //                   < DimensionName, DimensionShape>
+      using  OneDimension = DimInfo;
 
       //          <input/outputDataPointer, SizeOfBlob>
       template<typename T>
-      using Blob = std::pair<std::shared_ptr<T[]>, size_t>; 
+      using Blob = T*; 
 
-      typedef std::vector<Blob<float>> Blobs;
+      using Blobs = std::vector<Blob<float>>;
 
 
     public:
@@ -43,25 +56,30 @@ namespace Resources
        * */ 
       const std::vector<OneDimension>& GetOutputDimenssion() const;
 
-    private:
-      Model(const std::string& p_modelpath);
-      ~Model() = default;
+      /*
+       * Return the model`s input data(blobs)
+       * */
+      const Blobs& GetInputPtr() const;
 
+    private:
+      Model(std::vector<std::string> p_classNames, std::vector<OneDimension> p_inputDim, 
+          std::vector<OneDimension> p_outputDim, Blobs p_blobs);
+
+      ~Model();
     public:
       // model path
-      const std::string modelPath;
+      //const std::string m_pModelPath;
     private:
       
-      std::vector<std::string> m_classNames;
+      const std::vector<std::string> m_classNames;
 
-      std::vector<OneDimension> m_inputDim;
-      std::vector<OneDimension> m_outputDim;
-
+      const std::vector<OneDimension> m_inputDim;
+      const std::vector<OneDimension> m_outputDim;
 
       bool isDynamicInputShape = false;
-
+       
       // default using float type
-      Blobs blobs;
+      Blobs m_blobs;
 
   };
 }
