@@ -4,8 +4,7 @@
 #include <stdint.h>
 #include <memory>
 #include <core/session/onnxruntime_cxx_api.h>
-
-
+#include "Resources/DimensionInfomation.h"
 /*
  *  
  * */
@@ -17,25 +16,13 @@ namespace Resources
 
     public:
 
-    // some infomation of single dimension 
-    struct DimensionInfomation
-    {
-      std::string dimName;
-      size_t tensorSize;
-      std::vector<int64_t> tensor;
-      ONNXTensorElementDataType type;
-    };
-
-    using DimInfo = struct DimensionInfomation; 
-
-    //                   < DimensionName, DimensionShape>
-      using  OneDimension = DimInfo;
+    using  OneDimension = std::shared_ptr<DimensionInfomation>;
 
       //          <input/outputDataPointer, SizeOfBlob>
-      template<typename T>
+    template<typename T>
       using Blob = T*; 
 
-      using Blobs = std::vector<Blob<float>>;
+    using Blobs = std::vector<Blob<float>>;
 
 
     public:
@@ -66,15 +53,12 @@ namespace Resources
           std::vector<OneDimension> p_outputDim, Blobs p_blobs);
 
       ~Model();
-    public:
-      // model path
-      //const std::string m_pModelPath;
     private:
       
       const std::vector<std::string> m_classNames;
 
       const std::vector<OneDimension> m_inputDim;
-      const std::vector<OneDimension> m_outputDim;
+      const std::vector<OneDimension> m_outputDim; // this maybe useless
 
       bool isDynamicInputShape = false;
        

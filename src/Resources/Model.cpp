@@ -1,7 +1,6 @@
 #include "Resources/Model.h"
 
 
-
 const std::vector<std::string>& Resources::Model::GetClassNames() const
 {
   return m_classNames;

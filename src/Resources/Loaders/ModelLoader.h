@@ -16,9 +16,6 @@ namespace Resources
 
     private:
       static std::vector<std::string> ParseClassNames(const Ort::Session& p_session);
-      
-      static size_t VectorProduct(const std::vector<int64_t>& vector);
-     
-      
+    
   };
 }

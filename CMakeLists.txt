@@ -7,9 +7,10 @@ option(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
 set(CMAKE_BUILD_TYPE Debug)
 
 
-# onnxruntime = v1.12.1 
+# onnxruntime = v1.12.1
 set(onnxruntime_dir "/usr/local/onnxruntime")
 include_directories(${onnxruntime_dir}/include)
+
 
 
 # opencv
@@ -26,7 +27,7 @@ target_link_libraries(ImGui dl)
 ################################################################################################################
 
 
-# main 
+# main
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
 
@@ -39,7 +40,7 @@ add_library(MODEL STATIC ${MODEL_SRC})
 
 add_library(FILE_BROWSER STATIC ${PROJECT_SOURCE_DIR}/src/UI/Widgets/External/ui_FileBrowser.cpp)
 
-# opengl 
+# opengl
 target_link_libraries(FILE_BROWSER ImGui GL glfw)
 
 
@@ -59,11 +60,11 @@ endforeach()
 
 add_executable(${PROJECT_NAME}
     src/main.cpp
-    #${MAIN_SRC} 
+    #${MAIN_SRC}
 )
 
 
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(${PROJECT_NAME}
   UI STYLE ${OpenCV_LIBS} "${onnxruntime_dir}/lib/libonnxruntime.so")
 
 

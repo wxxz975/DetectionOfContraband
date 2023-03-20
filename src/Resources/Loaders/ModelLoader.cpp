@@ -21,13 +21,11 @@ Resources::Model* Resources::ModelLoader::LoadModel(const Ort::Session& p_sessio
     
     auto TypeAndShape = inputTypeInfo.GetTensorTypeAndShapeInfo();
     
-    ONNXTensorElementDataType eleType = TypeAndShape.GetElementType(); 
+    //ONNXTensorElementDataType eleType = TypeAndShape.GetElementType(); 
     std::vector<int64_t> tenShape = TypeAndShape.GetShape();
     
-    uint64_t inputTensorSize = VectorProduct(tenShape);
-
-    inputDim.push_back({inputname, inputTensorSize, tenShape, eleType});
-    blobs.push_back(new float[inputTensorSize]);
+    inputDim.push_back(std::make_shared<DimensionInfomation>(inputname, tenShape));
+    blobs.push_back(new float[inputDim.back().get()->Size]);
   }
 
   //std::cout << "output dimension: " << outputCount << "\n";
@@ -38,12 +36,10 @@ Resources::Model* Resources::ModelLoader::LoadModel(const Ort::Session& p_sessio
 
     auto TypeAndShape = outputTypeInfo.GetTensorTypeAndShapeInfo();
 
-    ONNXTensorElementDataType eleType = TypeAndShape.GetElementType();
+    //ONNXTensorElementDataType eleType = TypeAndShape.GetElementType();
     std::vector<int64_t> tenShape = TypeAndShape.GetShape();
-    
-    uint64_t outputTensorSize = VectorProduct(tenShape);
-  
-    outputDim.push_back({outputName, outputTensorSize, tenShape, eleType});
+     
+    outputDim.push_back(std::make_shared<DimensionInfomation>(outputName, tenShape));
   }
 
 
@@ -93,14 +89,3 @@ std::vector<std::string> Resources::ModelLoader::ParseClassNames(const Ort::Sess
   return result;
 }
 
-size_t Resources::ModelLoader::VectorProduct(const std::vector<int64_t>& vector)
-{
-    if (vector.empty())
-        return 0;
-
-    size_t product = 1;
-    for (const auto& element : vector)
-        product *= element;
-
-    return product;
-}
