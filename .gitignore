@@ -41,4 +41,10 @@ build/
 .idea/
 .vscode/
 
+# ccls
+.ccls-cache
+
+# cache
+.cache/
+tags
 >>>>>>> init
