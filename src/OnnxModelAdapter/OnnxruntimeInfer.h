@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include <core/session/onnxruntime_cxx_api.h>
-#include "ModelAdapter/AbstractDetectAlgorithm.h"
+#include "OnnxModelAdapter/AbstractDetectAlgorithm.h"
 #include "OnnxruntimeAssets.h"
 
 class OnnxruntimeInfer: public OnnxruntimeAssets,

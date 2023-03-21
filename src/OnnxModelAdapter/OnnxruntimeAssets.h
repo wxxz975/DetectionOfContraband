@@ -2,6 +2,7 @@
 #include <core/session/onnxruntime_cxx_api.h>
 #include <vector>
 #include <string>
+#include <opencv2/opencv.hpp>
 
 class OnnxruntimeAssets
 {

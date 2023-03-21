@@ -1,6 +1,5 @@
-#include "OnnxruntimeInfer.h"
-#include "TensorHelper.h"
-#include "Utils.h"
+#include "OnnxModelAdapter/OnnxruntimeInfer.h"
+#include "OnnxModelAdapter/Utils.h"
 #include <cassert>
 #include <opencv2/opencv.hpp>
 
@@ -54,13 +53,12 @@ const std::vector<DetectionResultNode> OnnxruntimeInfer::postprocessing(const cv
     // 它相当于只有一个batch, 这里取的ouput的withd*height
 
 
-    for (auto it = output.begin(); 
-        it != output.begin() + elementsInBatch; 
-        it += outputShape[2])
+    // outputShape-> [1, 25200, 10] -> 其中 10 = 5(x,y,w,h, box_conf) + 5(confdence of every class)
+    for (auto it = output.begin(); it != output.begin() + elementsInBatch; it += outputShape[2])
     {
         float clsConf = it[4];
 
-        if (clsConf > confThreshold)
+        if (clsConf > confThreshold) // check box confidence
         {
             int centerX = (int) (it[0]);
             int centerY = (int) (it[1]);
@@ -73,10 +71,10 @@ const std::vector<DetectionResultNode> OnnxruntimeInfer::postprocessing(const cv
             int classId;
             OnnxruntimeUtils::getBestClassInfo(it, numClasses, objConf, classId);
 
-            float confidence = clsConf * objConf;
+            float socre = clsConf * objConf; // socre
 
             boxes.emplace_back(left, top, width, height);
-            confs.emplace_back(confidence);
+            confs.emplace_back(socre);
             classIds.emplace_back(classId);
         }
     }
@@ -90,6 +88,8 @@ const std::vector<DetectionResultNode> OnnxruntimeInfer::postprocessing(const cv
     for (int idx : indices) {
         DetectionResultNode det;
         det.box = cv::Rect(boxes[idx]);
+
+        // 还原坐标
         OnnxruntimeUtils::scaleCoords(resizedImageShape, det.box, originalImageShape);
 
         det.confidence = confs[idx];
@@ -238,11 +238,14 @@ void detect(const std::vector<cv::Mat>& images)
   // the image and return the result 
 }
 
+
+// TODO: 去掉中间变量blob, 直接使用std::vector<float>tensor 进行存储， 预处理采用 tensor.data();
 const std::vector<DetectionResultNode> OnnxruntimeInfer::detect(const cv::Mat& image) {
     std::vector<int64_t> inputTensorShape = this->inputTensorShape[0];
     this->preprocessing(image, inputTensorShape);
 
     std::vector<float> inputTensorValues(blob, blob + inputTensorSize[0]);
+    inputTensorValues.data();
 
     std::vector<Ort::Value> inputTensors;
 
