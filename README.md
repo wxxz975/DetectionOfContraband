@@ -1,6 +1,6 @@
 
 # request
-## onnxruntime == 1.12.1
+## onnxruntime == 1.14.1
 ## opencv == 4.2.0 
 
 ## imgui  
