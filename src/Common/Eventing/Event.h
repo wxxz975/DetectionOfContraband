@@ -77,4 +77,3 @@ namespace Common::Eventing
     };
 }
 
-#include "Common/Eventing/Event.inl"

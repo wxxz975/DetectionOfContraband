@@ -7,8 +7,9 @@ option(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
 set(CMAKE_BUILD_TYPE Debug)
 
 
-# onnxruntime = v1.12.1
-set(onnxruntime_dir "/usr/local/onnxruntime")
+
+# onnxruntime = v1.14.1
+set(onnxruntime_dir "/usr/local/onnxruntime/onnxruntime-v1.14.1")
 include_directories(${onnxruntime_dir}/include)
 
 

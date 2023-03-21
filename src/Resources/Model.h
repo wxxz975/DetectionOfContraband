@@ -30,23 +30,29 @@ namespace Resources
       /*
       * Return the model`s label
       * */
-      const std::vector<std::string>& GetClassNames() const;
+      inline const std::vector<std::string>& GetClassNames() const {
+        return this->m_classNames;
+      };
 
 
       /*
       * Return the model`s input dimemsion
       * */
-      const std::vector<OneDimension>& GetInputDimenssion() const; 
+      inline const std::vector<OneDimension>& GetInputDimenssion() const {
+        return this->m_outputDim;
+      }; 
      
       /*
        * Return the model`s output dimenssion
        * */ 
-      const std::vector<OneDimension>& GetOutputDimenssion() const;
+      //inline const std::vector<OneDimension>& GetOutputDimenssion() const {};
 
       /*
        * Return the model`s input data(blobs)
        * */
-      const Blobs& GetInputPtr() const;
+      inline const Blobs& GetInputPtr() const {
+        return this->m_blobs;
+      };
 
     private:
       Model(std::vector<std::string> p_classNames, std::vector<OneDimension> p_inputDim, 
@@ -59,9 +65,7 @@ namespace Resources
 
       const std::vector<OneDimension> m_inputDim;
       const std::vector<OneDimension> m_outputDim; // this maybe useless
-
-      bool isDynamicInputShape = false;
-       
+ 
       // default using float type
       Blobs m_blobs;
 

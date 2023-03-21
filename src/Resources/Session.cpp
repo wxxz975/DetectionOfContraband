@@ -9,6 +9,7 @@
 #include "Common/Logger/TXTLogger.h"
 #endif
 
+#include <memory>
 
 
 Resources::Session::Session(const std::string &p_modelPath):
@@ -50,10 +51,9 @@ Resources::Session::Session(const std::string &p_modelPath):
     std::cout << "model path:" << m_pModelPath.c_str() << "\n";
     m_pSession = Ort::Session(env, m_pModelPath.c_str(), m_pSessionOpt);
 
-    m_pMod = ModelLoader::LoadModel(m_pSession);
-
-
+    m_pMod = std::unique_ptr<Model>(ModelLoader::LoadModel(m_pSession));
 }
+
 
 
 const Ort::AllocatorWithDefaultOptions& Resources::Session::GetAllocator() const

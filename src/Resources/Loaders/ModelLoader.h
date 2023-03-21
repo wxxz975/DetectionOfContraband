@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 #include <core/session/onnxruntime_c_api.h>
 #include "Resources/Model.h"
 

@@ -13,33 +13,34 @@ Resources::Model* Resources::ModelLoader::LoadModel(const Ort::Session& p_sessio
 
   std::vector<Model::OneDimension> inputDim(inputCount);
   std::vector<Model::OneDimension> outputDim(outputCount);
+  
   for(size_t idx = 0; idx < inputCount; ++idx) {
 
-    const char* inputname = p_session.GetInputName(idx, allocator);
-    
+    Ort::AllocatedStringPtr inputname = p_session.GetInputNameAllocated(idx, allocator);
+     
+
     Ort::TypeInfo inputTypeInfo = p_session.GetInputTypeInfo(idx); 
     
     auto TypeAndShape = inputTypeInfo.GetTensorTypeAndShapeInfo();
     
-    //ONNXTensorElementDataType eleType = TypeAndShape.GetElementType(); 
     std::vector<int64_t> tenShape = TypeAndShape.GetShape();
     
-    inputDim.push_back(std::make_shared<DimensionInfomation>(inputname, tenShape));
+    inputDim.push_back(std::make_shared<DimensionInfomation>(inputname.get(), tenShape));
     blobs.push_back(new float[inputDim.back().get()->Size]);
   }
 
-  //std::cout << "output dimension: " << outputCount << "\n";
+  // 之前犯了一个错误， 将unique_ptr<char>这个指针保存下来，但是他并不会拷贝内存
+  // 只是保存了一个指针，当这个unique_ptr失去作用域的时候就被释放了，但我保存的指针就成为野指针
   for(size_t idx = 0; idx < outputCount; ++idx) {
-    char* outputName = p_session.GetOutputName(idx, allocator);
-
+    Ort::AllocatedStringPtr outputName = p_session.GetOutputNameAllocated(idx, allocator);
+    
     Ort::TypeInfo outputTypeInfo = p_session.GetOutputTypeInfo(idx);
 
     auto TypeAndShape = outputTypeInfo.GetTensorTypeAndShapeInfo();
 
-    //ONNXTensorElementDataType eleType = TypeAndShape.GetElementType();
     std::vector<int64_t> tenShape = TypeAndShape.GetShape();
      
-    outputDim.push_back(std::make_shared<DimensionInfomation>(outputName, tenShape));
+    outputDim.push_back(std::make_shared<DimensionInfomation>(outputName.get(), tenShape));
   }
 
 
