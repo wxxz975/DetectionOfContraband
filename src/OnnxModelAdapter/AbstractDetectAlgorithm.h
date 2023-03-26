@@ -1,33 +1,29 @@
 #pragma once
 #include <vector>
-#include <string>
-#include <map>
-#include <memory>
-#include <opencv2/opencv.hpp>
+#include "OnnxModelAdapter/OnnxCommon.hpp"
+#include "OnnxModelAdapter/APreprocessing.h"
+#include "OnnxModelAdapter/APostprocessing.h"
 
 
-typedef struct _DetectionResultNode
+namespace OnnxModelAdapter
 {
-    cv::Rect box;
-    int classIndex;
-    float confidence;
-}DetectionResultNode, *pDetectionResultNode;
+  class AbstractDetectAlgorithm
+  {
+    public:
+      float confThreshold = 0.4; // confidence threshold
+      float iouThreshold = 0.45;  // iou threshold
+    public:
 
-class AbstractDetectAlgorithm
-{
-public:
-    std::vector<std::string> m_labelNames; 
-    float confThreshold = 0.4; // confidence threshold
-    float iouThreshold = 0.45;  // iou threshold
-public:
+      AbstractDetectAlgorithm(APreprocessing* prepro, APostprocessing* postpro)
+        :m_prepro(prepro), m_postpro(postpro) {} ;
 
-    AbstractDetectAlgorithm() = default;
+      virtual ~AbstractDetectAlgorithm() = default;
 
-    virtual ~AbstractDetectAlgorithm() = default;
+      virtual const std::vector<std::vector<ResultNode>> detect(const std::vector<cv::Mat>& images) = 0;
 
-    virtual const std::vector<DetectionResultNode> detect(const cv::Mat& image) = 0;
-    
-    virtual bool reloadModel(const std::string& modelPath, const bool isGPU = true) = 0; 
-};
+    protected:
+      std::unique_ptr<APreprocessing> m_prepro;
+      std::unique_ptr<APostprocessing> m_postpro;
+  };
 
-
+}

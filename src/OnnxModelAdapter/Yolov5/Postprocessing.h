@@ -8,7 +8,7 @@ namespace OnnxModelAdapter::Yolov5
   {
     public:
       Postprocessing() = default;
-      virtual ~Postprocessing() = 0;
+      virtual ~Postprocessing() = default;
 
     public:
       virtual std::vector<ResultNode> Impl(Ort::Value& outputTensor, 

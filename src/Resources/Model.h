@@ -31,16 +31,20 @@ namespace Resources
       * Return the model`s label
       * */
       inline const std::vector<std::string>& GetClassNames() const {
-        return this->m_classNames;
+        return m_classNames;
       };
 
 
       /*
       * Return the model`s input dimemsion
       * */
-      inline const std::vector<OneDimension>& GetInputDimenssion() const {
-        return this->m_outputDim;
-      }; 
+      inline const std::vector<OneDimension>& GetInputDimension() const {
+        return m_inputDim;
+      };
+
+      inline const std::vector<OneDimension>& GetOutputDimension() const {
+        return m_outputDim;
+      }
      
       /*
        * Return the model`s output dimenssion
@@ -51,8 +55,16 @@ namespace Resources
        * Return the model`s input data(blobs)
        * */
       inline const Blobs& GetInputPtr() const {
-        return this->m_blobs;
+        return m_blobs;
       };
+
+      inline const std::vector<const char*>& GetInputNames() const {
+        return m_pInputNames;
+      }
+
+      inline const std::vector<const char*>& GetOutputNames() const {
+        return m_pOutputNames;
+      }
 
     private:
       Model(std::vector<std::string> p_classNames, std::vector<OneDimension> p_inputDim, 
@@ -65,7 +77,9 @@ namespace Resources
 
       const std::vector<OneDimension> m_inputDim;
       const std::vector<OneDimension> m_outputDim; // this maybe useless
- 
+      
+      std::vector<const char*> m_pInputNames;
+      std::vector<const char*> m_pOutputNames;
       // default using float type
       Blobs m_blobs;
 

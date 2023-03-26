@@ -12,8 +12,8 @@
 #include <memory>
 
 
-Resources::Session::Session(const std::string &p_modelPath):
-  m_pModelPath(p_modelPath)
+Resources::Session::Session(const std::string &p_modelPath, bool isGPU):
+  m_pModelPath(p_modelPath), m_IsGPU(isGPU)
 
 {
     env = Ort::Env(OrtLoggingLevel::ORT_LOGGING_LEVEL_WARNING, m_EnvDefaultName.c_str());
@@ -51,12 +51,12 @@ Resources::Session::Session(const std::string &p_modelPath):
     std::cout << "model path:" << m_pModelPath.c_str() << "\n";
     m_pSession = Ort::Session(env, m_pModelPath.c_str(), m_pSessionOpt);
 
-    m_pMod = std::unique_ptr<Model>(ModelLoader::LoadModel(m_pSession));
+    m_pMod = std::shared_ptr<Model>(ModelLoader::LoadModel(m_pSession));
+   
+    // create memory info
+      m_pMemoryInfo = Ort::MemoryInfo::CreateCpu(OrtAllocatorType::OrtDeviceAllocator, 
+          OrtMemType::OrtMemTypeCPUInput);
 }
 
 
 
-const Ort::AllocatorWithDefaultOptions& Resources::Session::GetAllocator() const
-{
-  return m_allocator;
-}

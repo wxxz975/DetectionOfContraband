@@ -13,7 +13,8 @@ namespace Resources
     std::vector<int64_t> Shape;
 
 
-    DimensionInfomation(std::string _Name, std::vector<int64_t> _Shape)
+
+    DimensionInfomation(const std::string& _Name, std::vector<int64_t> _Shape)
     {
       Name = _Name;
       Shape = _Shape;

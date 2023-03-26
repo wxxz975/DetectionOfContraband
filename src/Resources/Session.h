@@ -10,16 +10,27 @@ namespace Resources
   class Session
   {
     public:
-      Session(const std::string& p_modelPath);
+      Session(const std::string& p_modelPath, bool isGPU = true);
       ~Session() = default;
     
       // return default allocator 
-      const Ort::AllocatorWithDefaultOptions& GetAllocator() const;
+      inline const Ort::AllocatorWithDefaultOptions& GetAllocator() const {
+        return m_allocator;
+      };
+      
+      inline const Ort::MemoryInfo& GetMemoryInfo() const {
+        return m_pMemoryInfo;
+      }
 
+      // return model pointer
+      inline const std::shared_ptr<Model> GetModel() const {
+        return m_pMod;
+      };
 
+    public:
+      Ort::Session m_pSession{nullptr};
     private:
       
-      Ort::Session m_pSession{nullptr};
       
       Ort::Env env{nullptr};
 
@@ -35,7 +46,7 @@ namespace Resources
       int m_intra_op_num_threads = 4; 
       bool m_IsGPU = true; 
       
-      std::unique_ptr<Model> m_pMod = nullptr;   
+      std::shared_ptr<Model> m_pMod = nullptr;   
   };
 
 }

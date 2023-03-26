@@ -1,7 +1,7 @@
 #pragma once 
 
 #include <vector>
-#include <UI/Plugins/IPlugin.h>
+#include "UI/Plugins/IPlugin.h"
 
 namespace DcUI::Plugins
 {

@@ -15,6 +15,6 @@ namespace DcUI::Internal
 
       static ImVec4 ToImVec4(const Types::Color& p_value);
   
-      static ImVec2 ToImVec2(const )
+     // static ImVec2 ToImVec2(const )
   };
 }
