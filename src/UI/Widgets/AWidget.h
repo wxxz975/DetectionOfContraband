@@ -4,10 +4,11 @@
 #include "UI/API/IDrawable.h"
 #include "UI/Plugins/Pluginable.h"
 
+namespace DcUI::Internal {class WidgetContainer;}
+
 namespace DcUI::Widgets
 {
-  class WidgetContainer;
-  class AWidget: public API::IDrawable, Plugins::Pluginable
+  class AWidget: public API::IDrawable, public Plugins::Pluginable
   {
     public:
       /*
@@ -44,7 +45,7 @@ namespace DcUI::Widgets
        * Defines the parent of this widget
        * @param p_parent
        */
-      void SetParent(WidgetContainer* p_parent);
+      void SetParent(Internal::WidgetContainer* p_parent);
 
       /**
        * Returns true if the widget has a parent
@@ -54,7 +55,7 @@ namespace DcUI::Widgets
       /**
        * Returns the parent of the widget or nullptr if there is no parent
        */
-      WidgetContainer* GetParent();
+      Internal::WidgetContainer* GetParent();
 
     protected:
       virtual void _Draw_Impl() = 0;
@@ -64,7 +65,7 @@ namespace DcUI::Widgets
       bool lineBreak = true;
 
     protected:
-      WidgetContainer* m_parent;
+      Internal::WidgetContainer* m_parent;
       std::string m_widgetID = "?";
       bool m_autoExecutePlugins = true;
 

@@ -31,7 +31,8 @@ void DcUI::Internal::WidgetContainer::RemoveAllWidgets()
 
 void DcUI::Internal::WidgetContainer::ConsiderWidget(Widgets::AWidget & p_widget, bool p_manageMemory)
 {
-	m_widgets.emplace_back(std::make_pair(&p_widget, p_manageMemory ? MemoryMode::INTERNAL_MANAGMENT : MemoryMode::EXTERNAL_MANAGMENT));
+	m_widgets.emplace_back(std::make_pair(&p_widget, 
+        p_manageMemory ? MemoryMode::INTERNAL_MANAGMENT : MemoryMode::EXTERNAL_MANAGMENT));
 	p_widget.SetParent(this);
 }
 
