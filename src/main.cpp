@@ -1,18 +1,17 @@
 #include "Core/Application.h"
-#include <memory>
-
-#include <unordered_map>
-#include <string>
 
 
 
 
-
+static const char* p_configPath = "";
 int main(int argc, char*argv[]) {
-    AbstractApplication *app = new Application();
+  
+  std::unique_ptr<Core::Application> app = std::unique_ptr<Core::Application>();
 
-    app->run();
-    return 0;
+  app->run(p_configPath);
+
+
+  return 0;
 }
 
 

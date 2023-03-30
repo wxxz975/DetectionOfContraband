@@ -1,8 +1,8 @@
 #pragma once
 
-
 #include "Common/Eventing/Event.h"
 #include "UI/Widgets/DataWidget.h"
+
 
 namespace DcUI::Widgets::Menu
 {
@@ -23,7 +23,7 @@ namespace DcUI::Widgets::Menu
 
       Common::Eventing::Event<> ClickedEvent;
       Common::Eventing::Event<bool> ValueChangedEvent;
-
+      
     private:
       bool m_selected;
   };

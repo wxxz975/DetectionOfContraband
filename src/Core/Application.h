@@ -1,33 +1,30 @@
 #pragma once
-#include <imgui/imgui.h>
-#include <imgui/imgui_impl_glfw.h>
-#include <imgui/imgui_impl_opengl3.h>
-#include <GLFW/glfw3.h>
-#include <memory>
-#include "UI/AbstractApplication.h"
-#include "UI/ui_Engine.h"
 
+#include <string>
+#include "Core/Context.h"
 
-
-class Application: public AbstractApplication, public ui_Engine
+namespace Core
 {
+  class Application
+  {
+    public:
+      Application();
+      ~Application() = default;
 
-private:
-    bool isActive = true;
-    GLFWwindow* wind = nullptr;
-    const char* WindowName = "ContrabandOfDetection";
-    ImVec2 windSize = {1920.f,  1080.f};
 
-    float windowFontSacle = 1.4f;
-public:
-    Application();
-    ~Application() = default;
+      /*
+       * @brief: run the application
+       * @param: p_configPath: the path of the config file
+       * * @description: the config file is a ini file, 
+       *               which contains the model config path and UI config path of the application
+       * */
+      void run(const std::string& p_configPath);
 
-    
-    virtual bool run() override;
+    private:
+      void preprocess() const;
+      void postprocess() const;
 
-private:
-    void preprocess() const;
-    void postprocess() const;
-};
-
+    private:
+      std::unique_ptr<Context> m_context;
+  };
+}
