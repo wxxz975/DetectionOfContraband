@@ -1,5 +1,5 @@
 
-# request
+# Prerequisites:
 ## onnxruntime == 1.14.1
 ## opencv == 4.2.0 
 
